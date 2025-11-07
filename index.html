@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Análisis de Opiniones | Café de Tere</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN for graphics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <!-- Lucide Icons for aesthetic appeal -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Configuración de color primario para Tailwind */
+        :root {
+            --color-primary: #059669; /* Emerald 600 */
+            --color-secondary: #1f2937; /* Gray 800 */
+        }
+
+        /* Estilo base de la tarjeta */
+        .card {
+            @apply bg-white p-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl border border-gray-100;
+        }
+
+        /* Estilo para colapsables (Temáticas) */
+        .topic-header {
+            @apply flex justify-between items-center w-full text-left font-semibold py-3 px-3 cursor-pointer transition-colors duration-200 hover:bg-gray-50;
+        }
+        .topic-content {
+            @apply p-4 text-sm text-gray-700 bg-gray-50 rounded-b-lg border-t border-gray-200;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-primary': '#059669', /* Emerald 600 */
+                        'brand-secondary': '#1f2937', /* Gray 800 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 font-sans antialiased pb-12">
+
+    <!-- 
+        INYECCIÓN DE DATOS: El contenido del archivo result_with_reports.json
+        se simula aquí para el renderizado dinámico. 
+    -->
+    <script>
+        const DATA_REPORT = {
+            "describe_matrix": { /* ... (Omitido para JS, no se visualiza directamente) */ },
+            "corr_matrix": { /* ... */ },
+            "engagement_matrix": { /* ... */ },
+            "heatmap": {
+                "Monday": { "0.0": -1.0, "1.0": 0.0, "2.0": -1.0, "3.0": 0.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": 0.0, "8.0": -1.0, "9.0": 0.0, "10.0": -1.0, "11.0": 0.0, "12.0": -1.0, "13.0": -1.0, "14.0": 1.0, "15.0": 1.0, "16.0": 3.0, "17.0": 177.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": 2734.0, "23.0": 82.0 },
+                "Tuesday": { "0.0": 1.0, "1.0": 32.0, "2.0": 20.0, "3.0": 0.0, "4.0": 3.0, "5.0": -1.0, "6.0": -1.0, "7.0": 1.0, "8.0": -1.0, "9.0": 0.0, "10.0": -1.0, "11.0": 1.0, "12.0": 3.0, "13.0": 73.0, "14.0": 195.0, "15.0": 18.0, "16.0": 175.0, "17.0": 102.0, "18.0": 1012.0, "19.0": 651.0, "20.0": 210.0, "21.0": 412.0, "22.0": 1555.0, "23.0": 1331.0 },
+                "Wednesday": { "0.0": 209.0, "1.0": 906.0, "2.0": 1789.0, "3.0": 895.0, "4.0": 265.0, "5.0": 37.0, "6.0": 27.0, "7.0": 31.0, "8.0": 37.0, "9.0": 4.0, "10.0": 12.0, "11.0": 64.0, "12.0": 46.0, "13.0": 115.0, "14.0": 98.0, "15.0": 76.0, "16.0": 36.0, "17.0": 160.0, "18.0": 24.0, "19.0": 34.0, "20.0": 22.0, "21.0": 282.0, "22.0": 65.0, "23.0": 83.0 },
+                "Thursday": { "0.0": 37.0, "1.0": 104.0, "2.0": 40.0, "3.0": 10.0, "4.0": 15.0, "5.0": 8.0, "6.0": 0.0, "7.0": 0.0, "8.0": -1.0, "9.0": 0.0, "10.0": 0.0, "11.0": 1.0, "12.0": 17.0, "13.0": 5.0, "14.0": 1.0, "15.0": 3.0, "16.0": 57.0, "17.0": 29.0, "18.0": 10.0, "19.0": 1.0, "20.0": 16.0, "21.0": 1.0, "22.0": 1.0, "23.0": 100.0 },
+                "Friday": { "0.0": 5.0, "1.0": 0.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": -1.0, "11.0": -1.0, "12.0": -1.0, "13.0": -1.0, "14.0": 8.0, "15.0": -1.0, "16.0": -1.0, "17.0": -1.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": -1.0, "23.0": -1.0 },
+                "Saturday": { "0.0": 5.0, "1.0": -1.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": 11.0, "11.0": -1.0, "12.0": -1.0, "13.0": 0.0, "14.0": 0.0, "15.0": 5.0, "16.0": 2.0, "17.0": 8.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": 0.0, "22.0": -1.0, "23.0": -1.0 },
+                "Sunday": { "0.0": -1.0, "1.0": 0.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": -1.0, "11.0": -1.0, "12.0": -1.0, "13.0": 7.0, "14.0": -1.0, "15.0": 0.0, "16.0": 0.0, "17.0": -1.0, "18.0": 1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": 0.0, "23.0": -1.0 }
+            },
+            "topics": {
+                "topics": [
+                    { "title": "Precio percibido como alto/sobrevalorado", "detail": "Numerosos comentarios califican el bolón como caro (USD 3,5–5) frente a alternativas de USD 1–1,50; se cuestionan extras (p. ej., huevo a USD 1).", "challenge": "Reforzar la propuesta de valor y arquitectura de precios (combos, tamaños, extras incluidos) y comunicar qué respalda el precio (calidad, higiene, formalidad, servicio)." },
+                    { "title": "Calidad y sabor inconsistente al escalar", "detail": "Opiniones divididas: desde “normalito/malo/industrializado/perdió la sazón” hasta fans fieles; percepción de pérdida de esencia al masificarse.", "challenge": "Auditorías sensoriales y de procesos por local, formación continua, estandarización con flexibilidad local, medición NPS por producto/sucursal." },
+                    { "title": "Producto específico bajo crítica: tigrillo", "detail": "Comentarios frecuentes de tigrillo “sopudo” o insípido; otros lo defienden como el mejor.", "challenge": "Reformular y permitir personalización (textura, lácteos, toppings), test A/B de recetas y receta “clásica vs. ligera”." },
+                    { "title": "Métodos de pago limitados (no aceptan tarjetas)", "detail": "Reclamo reiterado por no aceptar tarjetas/Datafast; fricción para clientes que evitan efectivo.", "challenge": "Implementar pagos con tarjeta, QR y billeteras, sin afectar márgenes (negociar fees, mínimos por ticket, descuentos por cash planificados)." },
+                    { "title": "Experiencia en local: tiempos, temperatura y confort", "detail": "Elogios a limpieza “tipo quirófano” y buen servicio; quejas puntuales por colas, platos fríos y falta de aire acondicionado.", "challenge": "Gestión de picos (prep/holding), control de temperatura al pase, mejora de confort (AC donde aplique) y fila digital/turnos." }
+                ],
+                "conclusion": "Los ejes críticos son: 1) ajustar la propuesta de valor (precio, porción, extras) y métodos de pago; 2) recuperar y sostener la consistencia sensorial del bolón y del tigrillo en todas las sedes; 3) mejorar fricciones de experiencia (tiempos, temperatura, confort, autoservicio); 4) profesionalizar delivery y expansión con dark kitchens y sucursales estratégicas; 5) gestionar la conversación digital con escucha activa y narrativa inclusiva que reduzca la polarización; 6) reforzar diferenciales (limpieza, ají, chicharrón) con innovación y personalización controlada. Priorizar quick wins (aceptar tarjetas, barra de salsas, comunicación de gramajes) mientras se ejecutan mejoras de fondo (auditorías de calidad y training) permitirá capturar valor sin diluir marca."
+            },
+            "sentiment_report": {
+                "overall_polarity": "Mixto con ligera tendencia positiva y alta polarización",
+                "positive_percentage": 42.0,
+                "negative_percentage": 34.0,
+                "neutral_mixed_percentage": 24.0,
+                "dominant_themes": ["Precio y percepción de “caro/sobrevalorado”", "Calidad y sabor del bolón/tigrillo", "Historia de emprendimiento y éxito", "Servicio, limpieza y experiencia"],
+                "key_emotions": ["orgullo", "antojo", "enojo", "burla/sarcasmo", "frustración"],
+                "summary": "Las opiniones están fuertemente divididas: una parte significativa defiende a Café de Tere por su historia de emprendimiento, limpieza, servicio y consistencia; otra fracción crítica lo percibe como caro/sobrevalorado y cuestiona la calidad actual. Los principales drivers del sentimiento negativo son precio–valor y métodos de pago; los positivos, la marca consolidada, la experiencia del local y el relato de superación. Riesgo: que la etiqueta de “sobrevalorado/elitista” se consolide si no se atienden estas fricciones."
+            },
+            "collocation_report": {
+                "top_collocations": [
+                    { "phrase": "Café de Tere", "connection_to_challenges": "La marca concentra conversación polarizada (lovers vs haters). Reto: gestionar reputación y segmentación en redes." },
+                    { "phrase": "Bolón de Tere", "connection_to_challenges": "Producto estrella con quejas de “caro/normalito/frío”. Reto: estandarizar sabor, temperatura y porción por local/turno." },
+                    { "phrase": "Tigrillo de Tere", "connection_to_challenges": "Comentarios de “sopudo/insípido”. Reto: afinar receta y control de textura." },
+                    { "phrase": "No aceptan tarjetas", "connection_to_challenges": "Fricción recurrente en el pago. Reto: habilitar datáfonos, QR y billeteras para elevar conversión y ticket promedio." },
+                    { "phrase": "Limpieza de locales", "connection_to_challenges": "Atributo positivo diferencial. Reto: sostener el estándar en expansión y certificarlo para reforzar confianza." }
+                ],
+                "summary": "Las colocaciones más repetidas muestran que la conversación gira en torno a la marca y sus dos platos icónicos (bolón y tigrillo), con tensión en precio/valor y fuertes fricciones en medios de pago. Coexisten elogios a limpieza y a su ají con percepciones de “sobrevalorado”."
+            },
+            "entity_report": {
+                "main_brand_and_owner": ["Café de Tere (Bolón de Tere)", "Teresa Castro Mendoza (Doña Tere)", "@CafedeTere"],
+                "competitors_and_comparables": ["Amorfino Café", "Rey Bolón", "Juan Tonga", "Sambolón", "Verde & Café"],
+                "public_figures_and_influencers": ["Teresa Castro Mendoza (propietaria)", "MasterChef Ecuador (#MasterChefEcuador)", "The Pulp Ec (@ThePulpEc)"],
+                "key_associated_claims_topics": ["Precio percibido como caro/sobrevalorado", "No aceptación de tarjetas de crédito/datafast", "Calidad y sabor disparejos", "Higiene y estandarización: cocinas muy limpias"],
+                "relevant_locations": ["Guayaquil (GYE)", "La Garzota", "Vía a la Costa", "Alborada", "Urdesa"],
+                "summary": "El eje de la conversación es Café de Tere (propiedad de Teresa Castro Mendoza), una marca emblemática. Los temas clave que dominan el debate son: precios percibidos como altos, negativa a aceptar tarjetas, calidad/consistencia del producto, experiencia de servicio e higiene, y una fuerte polarización social y política en torno al éxito del negocio."
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar Lucide Icons
+            lucide.createIcons();
+            
+            // Renderizar dashboard
+            if (typeof DATA_REPORT !== 'undefined') {
+                renderDashboard(DATA_REPORT);
+            }
+
+            function renderDashboard(data) {
+                // 1. Resumen Ejecutivo
+                document.getElementById('executive-summary').innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-brand-primary flex-shrink-0 mt-1"></i>
+                        <p class="text-lg text-gray-700 leading-relaxed">${data.topics.conclusion}</p>
+                    </div>
+                `;
+                
+                // 2. Sentimiento
+                renderSentiment(data.sentiment_report);
+
+                // 3. Temáticas
+                renderTopics(data.topics.topics);
+
+                // 4. Colocaciones
+                renderCollocations(data.collocation_report);
+
+                // 5. Entidades
+                renderEntities(data.entity_report);
+
+                // 6. Heatmap
+                renderHeatmap(data.heatmap);
+
+                // 7. Inicializar oyentes para colapsables (temáticas)
+                setupCollapsibles();
+                
+                // Re-renderizar iconos después de la inyección de contenido
+                lucide.createIcons(); 
+            }
+
+            function renderSentiment(sentiment) {
+                document.getElementById('sentiment-summary').textContent = sentiment.summary;
+                document.getElementById('overall-polarity').textContent = sentiment.overall_polarity;
+
+                // Renderizar Temas y Emociones
+                document.getElementById('dominant-themes').innerHTML = sentiment.dominant_themes.map(t => `
+                    <li class="flex items-center text-sm text-gray-700 space-x-1">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 flex-shrink-0"></i>
+                        <span>${t}</span>
+                    </li>
+                `).join('');
+
+                document.getElementById('key-emotions').innerHTML = sentiment.key_emotions.map(e => `
+                    <li class="flex items-center text-sm text-gray-700 space-x-1">
+                        <i data-lucide="${e.includes('enojo') || e.includes('frustración') ? 'frown' : 'smile'}" class="w-4 h-4 ${e.includes('enojo') || e.includes('frustración') ? 'text-red-500' : 'text-yellow-500'} flex-shrink-0"></i>
+                        <span>${e}</span>
+                    </li>
+                `).join('');
+
+                // Crear Gráfico de Pastel
+                const ctx = document.getElementById('sentimentChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Positivo', 'Negativo', 'Neutro/Mixto'],
+                        datasets: [{
+                            data: [sentiment.positive_percentage, sentiment.negative_percentage, sentiment.neutral_mixed_percentage],
+                            backgroundColor: [
+                                'rgba(5, 150, 105, 0.8)', // brand-primary (green)
+                                'rgba(239, 68, 68, 0.8)', // Red 500
+                                'rgba(100, 116, 139, 0.8)' // Slate 500
+                            ],
+                            borderColor: '#ffffff',
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { boxWidth: 12, padding: 15, font: { family: 'Inter', size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderTopics(topics) {
+                const container = document.getElementById('topics-container');
+                container.innerHTML = topics.map((topic, index) => `
+                    <div class="border border-gray-200 rounded-xl bg-white mb-3 overflow-hidden">
+                        <button class="topic-header" id="topic-header-${index}" aria-expanded="false" aria-controls="topic-content-${index}">
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-brand-primary text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span>
+                                <span class="text-brand-secondary text-base">${topic.title}</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 transition-transform duration-300 mr-4"></i>
+                        </button>
+                        <div class="topic-content hidden" id="topic-content-${index}">
+                            <p class="mb-2 text-sm font-medium text-gray-800 flex items-center"><i data-lucide="info" class="w-4 h-4 mr-1 text-blue-500"></i> Detalle del Tópico:</p>
+                            <p class="text-gray-600 mb-4 pl-5">${topic.detail}</p>
+                            <div class="p-3 bg-red-100 border-l-4 border-red-500 rounded-md">
+                                <p class="font-semibold text-red-700 flex items-center mb-1">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i>
+                                    Desafío Clave:
+                                </p>
+                                <p class="text-red-600 pl-6">${topic.challenge}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function setupCollapsibles() {
+                document.querySelectorAll('.topic-header').forEach(header => {
+                    header.addEventListener('click', () => {
+                        const contentId = header.getAttribute('aria-controls');
+                        const content = document.getElementById(contentId);
+                        const icon = header.querySelector('i[data-lucide]');
+                        
+                        // Toggle content
+                        const isHidden = content.classList.contains('hidden');
+                        
+                        // Collapse all others
+                        document.querySelectorAll('.topic-content').forEach(c => c.classList.add('hidden'));
+                        document.querySelectorAll('.topic-header i[data-lucide]').forEach(i => i.setAttribute('data-lucide', 'chevron-down'));
+                        document.querySelectorAll('.topic-header').forEach(h => h.setAttribute('aria-expanded', 'false'));
+                        
+                        if (isHidden) {
+                            content.classList.remove('hidden');
+                            header.setAttribute('aria-expanded', 'true');
+                            icon.setAttribute('data-lucide', 'chevron-up');
+                        } else {
+                            content.classList.add('hidden');
+                            header.setAttribute('aria-expanded', 'false');
+                            icon.setAttribute('data-lucide', 'chevron-down');
+                        }
+                        lucide.createIcons(); 
+                    });
+                });
+            }
+
+
+            function renderCollocations(collocations) {
+                const container = document.getElementById('collocations-table-body');
+                container.innerHTML = collocations.top_collocations.map(col => `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <td class="p-3 text-sm font-semibold text-brand-primary">${col.phrase}</td>
+                        <td class="p-3 text-sm text-gray-700">${col.connection_to_challenges}</td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('collocation-summary').textContent = collocations.summary;
+            }
+
+            function renderEntities(entities) {
+                const entityList = (list) => list.map(item => `
+                    <li class="flex items-start text-sm text-gray-700 mb-1">
+                        <i data-lucide="dot" class="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5"></i>
+                        <span class="ml-1">${item}</span>
+                    </li>
+                `).join('');
+
+                // Se corrigió el error de 'claims' asegurando que el ID existe en el HTML
+                document.getElementById('main-brand-owner').innerHTML = entityList(entities.main_brand_and_owner);
+                document.getElementById('competitors').innerHTML = entityList(entities.competitors_and_comparables);
+                document.getElementById('influencers').innerHTML = entityList(entities.public_figures_and_influencers);
+                document.getElementById('claims').innerHTML = entityList(entities.key_associated_claims_topics); 
+                document.getElementById('locations').innerHTML = entityList(entities.relevant_locations);
+
+                document.getElementById('entity-summary').textContent = entities.summary;
+            }
+            
+            function renderHeatmap(heatmap) {
+                const container = document.getElementById('heatmap-table-body');
+                const days = Object.keys(heatmap);
+                
+                // Get all hours (keys of nested objects)
+                const hours = Array.from(new Set(days.flatMap(day => Object.keys(heatmap[day]))))
+                                .sort((a, b) => parseFloat(a) - parseFloat(b));
+
+                // Helper to get value and color
+                const allValues = days.flatMap(day => Object.values(heatmap[day])).filter(v => v !== -1);
+                const maxVal = Math.max(...allValues);
+
+                const getCellClass = (value) => {
+                    if (value === -1) return 'bg-gray-100 text-gray-400';
+                    if (maxVal === 0) return 'bg-gray-200 text-gray-700';
+                    
+                    const ratio = value / maxVal;
+                    if (ratio > 0.7) return 'bg-red-400 text-white font-bold';
+                    if (ratio > 0.5) return 'bg-orange-300 text-gray-800';
+                    if (ratio > 0.25) return 'bg-yellow-200 text-gray-800';
+                    return 'bg-green-100 text-gray-700';
+                };
+                
+                const formatHour = (h) => `${h.split('.')[0].padStart(2, '0')}:00`;
+
+                // Header Row (Hours)
+                const headerRow = hours.map(h => `<th class="p-2 text-xs font-semibold text-gray-700 border-x border-gray-300">${formatHour(h)}</th>`).join('');
+                document.getElementById('heatmap-header').innerHTML = `<th class="p-2 bg-gray-200 text-xs font-semibold text-gray-700 sticky left-0 z-10">Día</th>${headerRow}`;
+
+                // Data Rows (Days)
+                container.innerHTML = days.map(day => {
+                    const dataCells = hours.map(hour => {
+                        const val = heatmap[day][hour] !== undefined ? heatmap[day][hour] : -1;
+                        const displayVal = val !== -1 ? val.toFixed(0) : '-';
+                        return `<td class="p-2 text-xs text-center border border-gray-200 ${getCellClass(val)}">${displayVal}</td>`;
+                    }).join('');
+                    return `
+                        <tr>
+                            <td class="p-2 bg-gray-100 text-xs font-semibold text-gray-800 sticky left-0 z-10">${day.substring(0, 3)}</td>
+                            ${dataCells}
+                        </tr>
+                    `;
+                }).join('');
+            }
+        });
+    </script>
+
+    <!-- HEADER -->
+    <header class="bg-brand-secondary text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight flex items-center">
+                <i data-lucide="bar-chart-3" class="w-7 h-7 mr-3 text-brand-primary"></i>
+                Dashboard de Análisis de Opiniones
+            </h1>
+            <p class="text-sm sm:text-base mt-1 sm:mt-0 text-gray-300">Restaurante Café de Tere, Guayaquil</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT GRID -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- RESUMEN EJECUTIVO (Span across all columns) -->
+        <section class="lg:col-span-3 card">
+            <h2 class="text-xl font-bold text-brand-secondary mb-4 flex items-center">
+                <i data-lucide="send" class="w-5 h-5 mr-2 text-brand-primary"></i>
+                Resumen Ejecutivo Global y Conclusión
+            </h2>
+            <div id="executive-summary" class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <!-- Contenido inyectado por JS -->
+            </div>
+        </section>
+
+        <!-- COLUMNA IZQUIERDA (Sentimiento) -->
+        <div class="lg:col-span-1 space-y-6">
+            
+            <!-- 1. ANÁLISIS DE SENTIMIENTO -->
+            <section class="card">
+                <h2 class="text-xl font-bold text-brand-secondary mb-4 flex items-center">
+                    <i data-lucide="smile-plus" class="w-5 h-5 mr-2 text-brand-primary"></i>
+                    Análisis de Sentimiento
+                </h2>
+                <div class="space-y-4">
+                    <!-- Gráfico de Pastel -->
+                    <div class="h-64 flex justify-center items-center">
+                        <canvas id="sentimentChart" class="max-w-xs"></canvas>
+                    </div>
+
+                    <div class="p-3 bg-yellow-100 rounded-lg border border-yellow-300">
+                        <p class="text-sm font-semibold text-yellow-800">Polaridad General:</p>
+                        <p id="overall-polarity" class="text-base font-medium text-yellow-900"></p>
+                    </div>
+
+                    <p id="sentiment-summary" class="text-sm text-gray-700 border-t pt-4"></p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <p class="font-medium text-brand-secondary mb-2 flex items-center">
+                                <i data-lucide="zap" class="w-4 h-4 mr-1 text-green-500"></i>
+                                Temas Dominantes
+                            </p>
+                            <ul id="dominant-themes" class="space-y-1 pl-1"></ul>
+                        </div>
+                        <div>
+                            <p class="font-medium text-brand-secondary mb-2 flex items-center">
+                                <i data-lucide="heart" class="w-4 h-4 mr-1 text-red-500"></i>
+                                Emociones Clave
+                            </p>
+                            <ul id="key-emotions" class="space-y-1 pl-1"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- COLUMNA DERECHA (Temáticas y Colocaciones) -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- 2. TEMÁTICAS Y DESAFÍOS CLAVE -->
+            <section class="card">
+                <h2 class="text-xl font-bold text-brand-secondary mb-4 flex items-center">
+                    <i data-lucide="list-checks" class="w-5 h-5 mr-2 text-brand-primary"></i>
+                    Temáticas y Desafíos Clave (Focos de Acción)
+                </h2>
+                <div id="topics-container">
+                    <!-- Tarjetas de Temáticas inyectadas por JS (Colapsables) -->
+                </div>
+            </section>
+        </div>
+        
+        <!-- SECCIÓN INFERIOR (Colocaciones, Entidades y Heatmap) -->
+        <section class="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- 3. COLOCACIONES RELEVANTES (2/3 de ancho) -->
+            <div class="lg:col-span-2 card">
+                <h2 class="text-xl font-bold text-brand-secondary mb-4 flex items-center">
+                    <i data-lucide="link" class="w-5 h-5 mr-2 text-brand-primary"></i>
+                    Colocaciones (Frases) Relevantes
+                </h2>
+                <div class="overflow-x-auto rounded-lg border border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider w-1/4">Frase Clave</th>
+                                <th class="p-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Conexión con Desafíos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="collocations-table-body" class="bg-white divide-y divide-gray-100">
+                            <!-- Filas inyectadas por JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <p id="collocation-summary" class="text-sm text-gray-600 mt-4 p-2 bg-gray-50 rounded-lg border border-gray-100"></p>
+            </div>
+
+            <!-- 4. ENTIDADES Y PERSONAS DE INTERÉS (1/3 de ancho) -->
+            <div class="lg:col-span-1 space-y-6">
+                <section class="card">
+                    <h2 class="text-xl font-bold text-brand-secondary mb-4 flex items-center">
+                        <i data-lucide="users-2" class="w-5 h-5 mr-2 text-brand-primary"></i>
+                        Entidades y Personas de Interés
+                    </h2>
+
+                    <div class="space-y-3 text-sm">
+                        <p class="font-semibold text-brand-secondary border-b pb-1 flex items-center"><i data-lucide="store" class="w-4 h-4 mr-1 text-blue-500"></i> Marca y Propietarios</p>
+                        <ul id="main-brand-owner" class="space-y-1"></ul>
+
+                        <p class="font-semibold text-brand-secondary border-b pb-1 flex items-center"><i data-lucide="trending-down" class="w-4 h-4 mr-1 text-orange-500"></i> Competidores</p>
+                        <ul id="competitors" class="space-y-1"></ul>
+                        
+                        <p class="font-semibold text-brand-secondary border-b pb-1 flex items-center"><i data-lucide="megaphone" class="w-4 h-4 mr-1 text-purple-500"></i> Influencers/Figuras</p>
+                        <ul id="influencers" class="space-y-1"></ul>
+
+                        <!-- LISTA CORREGIDA: Se agregó el UL con ID 'claims' para coincidir con la función renderEntities en JS -->
+                        <p class="font-semibold text-brand-secondary border-b pb-1 flex items-center"><i data-lucide="alert-circle" class="w-4 h-4 mr-1 text-red-700"></i> Reclamaciones/Temas Clave</p>
+                        <ul id="claims" class="space-y-1"></ul>
+
+                        <p class="font-semibold text-brand-secondary border-b pb-1 flex items-center"><i data-lucide="map-pin" class="w-4 h-4 mr-1 text-red-500"></i> Ubicaciones Clave</p>
+                        <ul id="locations" class="space-y-1"></ul>
+                    </div>
+
+                    <p id="entity-summary" class="text-sm text-gray-600 mt-4 pt-4 border-t"></p>
+                </section>
+            </div>
+        </section>
+
+        <!-- 5. HEATMAP DE ENGAGEMENT (Full Width) -->
+        <section class="lg:col-span-3 card mt-6">
+            <h2 class="text-xl font-bold text-brand-secondary mb-4 flex items-center">
+                <i data-lucide="calendar" class="w-5 h-5 mr-2 text-brand-primary"></i>
+                Heatmap de Engagement (Likes por Día y Hora)
+            </h2>
+            <p class="text-sm text-gray-600 mb-4">La intensidad del color indica el volumen de "Likes" recibidos. Los valores altos (Rojo/Naranja) son las horas pico de mayor interacción.</p>
+            
+            <div class="overflow-x-auto rounded-lg border border-gray-200 max-h-96">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-200 sticky top-0 z-20">
+                        <tr id="heatmap-header" class="text-center">
+                            <!-- Encabezado de horas inyectado por JS -->
+                        </tr>
+                    </thead>
+                    <tbody id="heatmap-table-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Filas de datos inyectadas por JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>
