@@ -57,57 +57,61 @@
     -->
     <script>
         const DATA_REPORT = {
-            "describe_matrix": { /* ... (Omitido para JS, no se visualiza directamente) */ },
-            "corr_matrix": { /* ... */ },
-            "engagement_matrix": { /* ... */ },
-            "heatmap": {
-                "Monday": { "0.0": -1.0, "1.0": 0.0, "2.0": -1.0, "3.0": 0.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": 0.0, "8.0": -1.0, "9.0": 0.0, "10.0": -1.0, "11.0": 0.0, "12.0": -1.0, "13.0": -1.0, "14.0": 1.0, "15.0": 1.0, "16.0": 3.0, "17.0": 177.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": 2734.0, "23.0": 82.0 },
-                "Tuesday": { "0.0": 1.0, "1.0": 32.0, "2.0": 20.0, "3.0": 0.0, "4.0": 3.0, "5.0": -1.0, "6.0": -1.0, "7.0": 1.0, "8.0": -1.0, "9.0": 0.0, "10.0": -1.0, "11.0": 1.0, "12.0": 3.0, "13.0": 73.0, "14.0": 195.0, "15.0": 18.0, "16.0": 175.0, "17.0": 102.0, "18.0": 1012.0, "19.0": 651.0, "20.0": 210.0, "21.0": 412.0, "22.0": 1555.0, "23.0": 1331.0 },
-                "Wednesday": { "0.0": 209.0, "1.0": 906.0, "2.0": 1789.0, "3.0": 895.0, "4.0": 265.0, "5.0": 37.0, "6.0": 27.0, "7.0": 31.0, "8.0": 37.0, "9.0": 4.0, "10.0": 12.0, "11.0": 64.0, "12.0": 46.0, "13.0": 115.0, "14.0": 98.0, "15.0": 76.0, "16.0": 36.0, "17.0": 160.0, "18.0": 24.0, "19.0": 34.0, "20.0": 22.0, "21.0": 282.0, "22.0": 65.0, "23.0": 83.0 },
-                "Thursday": { "0.0": 37.0, "1.0": 104.0, "2.0": 40.0, "3.0": 10.0, "4.0": 15.0, "5.0": 8.0, "6.0": 0.0, "7.0": 0.0, "8.0": -1.0, "9.0": 0.0, "10.0": 0.0, "11.0": 1.0, "12.0": 17.0, "13.0": 5.0, "14.0": 1.0, "15.0": 3.0, "16.0": 57.0, "17.0": 29.0, "18.0": 10.0, "19.0": 1.0, "20.0": 16.0, "21.0": 1.0, "22.0": 1.0, "23.0": 100.0 },
-                "Friday": { "0.0": 5.0, "1.0": 0.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": -1.0, "11.0": -1.0, "12.0": -1.0, "13.0": -1.0, "14.0": 8.0, "15.0": -1.0, "16.0": -1.0, "17.0": -1.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": -1.0, "23.0": -1.0 },
-                "Saturday": { "0.0": 5.0, "1.0": -1.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": 11.0, "11.0": -1.0, "12.0": -1.0, "13.0": 0.0, "14.0": 0.0, "15.0": 5.0, "16.0": 2.0, "17.0": 8.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": 0.0, "22.0": -1.0, "23.0": -1.0 },
-                "Sunday": { "0.0": -1.0, "1.0": 0.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": -1.0, "11.0": -1.0, "12.0": -1.0, "13.0": 7.0, "14.0": -1.0, "15.0": 0.0, "16.0": 0.0, "17.0": -1.0, "18.0": 1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": 0.0, "23.0": -1.0 }
-            },
-            "topics": {
-                "topics": [
-                    { "title": "Precio percibido como alto/sobrevalorado", "detail": "Numerosos comentarios califican el bolón como caro (USD 3,5–5) frente a alternativas de USD 1–1,50; se cuestionan extras (p. ej., huevo a USD 1).", "challenge": "Reforzar la propuesta de valor y arquitectura de precios (combos, tamaños, extras incluidos) y comunicar qué respalda el precio (calidad, higiene, formalidad, servicio)." },
-                    { "title": "Calidad y sabor inconsistente al escalar", "detail": "Opiniones divididas: desde “normalito/malo/industrializado/perdió la sazón” hasta fans fieles; percepción de pérdida de esencia al masificarse.", "challenge": "Auditorías sensoriales y de procesos por local, formación continua, estandarización con flexibilidad local, medición NPS por producto/sucursal." },
-                    { "title": "Producto específico bajo crítica: tigrillo", "detail": "Comentarios frecuentes de tigrillo “sopudo” o insípido; otros lo defienden como el mejor.", "challenge": "Reformular y permitir personalización (textura, lácteos, toppings), test A/B de recetas y receta “clásica vs. ligera”." },
-                    { "title": "Métodos de pago limitados (no aceptan tarjetas)", "detail": "Reclamo reiterado por no aceptar tarjetas/Datafast; fricción para clientes que evitan efectivo.", "challenge": "Implementar pagos con tarjeta, QR y billeteras, sin afectar márgenes (negociar fees, mínimos por ticket, descuentos por cash planificados)." },
-                    { "title": "Experiencia en local: tiempos, temperatura y confort", "detail": "Elogios a limpieza “tipo quirófano” y buen servicio; quejas puntuales por colas, platos fríos y falta de aire acondicionado.", "challenge": "Gestión de picos (prep/holding), control de temperatura al pase, mejora de confort (AC donde aplique) y fila digital/turnos." }
-                ],
-                "conclusion": "Los ejes críticos son: 1) ajustar la propuesta de valor (precio, porción, extras) y métodos de pago; 2) recuperar y sostener la consistencia sensorial del bolón y del tigrillo en todas las sedes; 3) mejorar fricciones de experiencia (tiempos, temperatura, confort, autoservicio); 4) profesionalizar delivery y expansión con dark kitchens y sucursales estratégicas; 5) gestionar la conversación digital con escucha activa y narrativa inclusiva que reduzca la polarización; 6) reforzar diferenciales (limpieza, ají, chicharrón) con innovación y personalización controlada. Priorizar quick wins (aceptar tarjetas, barra de salsas, comunicación de gramajes) mientras se ejecutan mejoras de fondo (auditorías de calidad y training) permitirá capturar valor sin diluir marca."
-            },
-            "sentiment_report": {
-                "overall_polarity": "Mixto con ligera tendencia positiva y alta polarización",
-                "positive_percentage": 42.0,
-                "negative_percentage": 34.0,
-                "neutral_mixed_percentage": 24.0,
-                "dominant_themes": ["Precio y percepción de “caro/sobrevalorado”", "Calidad y sabor del bolón/tigrillo", "Historia de emprendimiento y éxito", "Servicio, limpieza y experiencia"],
-                "key_emotions": ["orgullo", "antojo", "enojo", "burla/sarcasmo", "frustración"],
-                "summary": "Las opiniones están fuertemente divididas: una parte significativa defiende a Café de Tere por su historia de emprendimiento, limpieza, servicio y consistencia; otra fracción crítica lo percibe como caro/sobrevalorado y cuestiona la calidad actual. Los principales drivers del sentimiento negativo son precio–valor y métodos de pago; los positivos, la marca consolidada, la experiencia del local y el relato de superación. Riesgo: que la etiqueta de “sobrevalorado/elitista” se consolide si no se atienden estas fricciones."
-            },
-            "collocation_report": {
-                "top_collocations": [
-                    { "phrase": "Café de Tere", "connection_to_challenges": "La marca concentra conversación polarizada (lovers vs haters). Reto: gestionar reputación y segmentación en redes." },
-                    { "phrase": "Bolón de Tere", "connection_to_challenges": "Producto estrella con quejas de “caro/normalito/frío”. Reto: estandarizar sabor, temperatura y porción por local/turno." },
-                    { "phrase": "Tigrillo de Tere", "connection_to_challenges": "Comentarios de “sopudo/insípido”. Reto: afinar receta y control de textura." },
-                    { "phrase": "No aceptan tarjetas", "connection_to_challenges": "Fricción recurrente en el pago. Reto: habilitar datáfonos, QR y billeteras para elevar conversión y ticket promedio." },
-                    { "phrase": "Limpieza de locales", "connection_to_challenges": "Atributo positivo diferencial. Reto: sostener el estándar en expansión y certificarlo para reforzar confianza." }
-                ],
-                "summary": "Las colocaciones más repetidas muestran que la conversación gira en torno a la marca y sus dos platos icónicos (bolón y tigrillo), con tensión en precio/valor y fuertes fricciones en medios de pago. Coexisten elogios a limpieza y a su ají con percepciones de “sobrevalorado”."
-            },
-            "entity_report": {
-                "main_brand_and_owner": ["Café de Tere (Bolón de Tere)", "Teresa Castro Mendoza (Doña Tere)", "@CafedeTere"],
-                "competitors_and_comparables": ["Amorfino Café", "Rey Bolón", "Juan Tonga", "Sambolón", "Verde & Café"],
-                "public_figures_and_influencers": ["Teresa Castro Mendoza (propietaria)", "MasterChef Ecuador (#MasterChefEcuador)", "The Pulp Ec (@ThePulpEc)"],
-                "key_associated_claims_topics": ["Precio percibido como caro/sobrevalorado", "No aceptación de tarjetas de crédito/datafast", "Calidad y sabor disparejos", "Higiene y estandarización: cocinas muy limpias"],
-                "relevant_locations": ["Guayaquil (GYE)", "La Garzota", "Vía a la Costa", "Alborada", "Urdesa"],
-                "summary": "El eje de la conversación es Café de Tere (propiedad de Teresa Castro Mendoza), una marca emblemática. Los temas clave que dominan el debate son: precios percibidos como altos, negativa a aceptar tarjetas, calidad/consistencia del producto, experiencia de servicio e higiene, y una fuerte polarización social y política en torno al éxito del negocio."
-            }
-        };
-
+    "describe_matrix": {},
+    "corr_matrix": {},
+    "engagement_matrix": {},
+    "heatmap": {
+        // Heatmap de engagement por día de la semana (filas) y hora (columnas 0-23).
+        "Monday": { "0.0": -1.0, "1.0": 0.0, "2.0": -1.0, "3.0": 0.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": 0.0, "8.0": -1.0, "9.0": 0.0, "10.0": -1.0, "11.0": 0.0, "12.0": -1.0, "13.0": -1.0, "14.0": 1.0, "15.0": 1.0, "16.0": 3.0, "17.0": 177.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": 2734.0, "23.0": 82.0 },
+        "Tuesday": { "0.0": 1.0, "1.0": 32.0, "2.0": 20.0, "3.0": 0.0, "4.0": 3.0, "5.0": -1.0, "6.0": -1.0, "7.0": 1.0, "8.0": -1.0, "9.0": 0.0, "10.0": -1.0, "11.0": 1.0, "12.0": 3.0, "13.0": 73.0, "14.0": 195.0, "15.0": 18.0, "16.0": 175.0, "17.0": 102.0, "18.0": 1012.0, "19.0": 651.0, "20.0": 210.0, "21.0": 412.0, "22.0": 1555.0, "23.0": 1331.0 },
+        "Wednesday": { "0.0": 209.0, "1.0": 906.0, "2.0": 1789.0, "3.0": 895.0, "4.0": 265.0, "5.0": 37.0, "6.0": 27.0, "7.0": 31.0, "8.0": 37.0, "9.0": 4.0, "10.0": 12.0, "11.0": 64.0, "12.0": 46.0, "13.0": 115.0, "14.0": 98.0, "15.0": 76.0, "16.0": 36.0, "17.0": 160.0, "18.0": 24.0, "19.0": 34.0, "20.0": 22.0, "21.0": 282.0, "22.0": 65.0, "23.0": 83.0 },
+        "Thursday": { "0.0": 37.0, "1.0": 104.0, "2.0": 40.0, "3.0": 10.0, "4.0": 15.0, "5.0": 8.0, "6.0": 0.0, "7.0": 0.0, "8.0": -1.0, "9.0": 0.0, "10.0": 0.0, "11.0": 1.0, "12.0": 17.0, "13.0": 5.0, "14.0": 1.0, "15.0": 3.0, "16.0": 57.0, "17.0": 29.0, "18.0": 10.0, "19.0": 1.0, "20.0": 16.0, "21.0": 1.0, "22.0": 1.0, "23.0": 100.0 },
+        "Friday": { "0.0": 5.0, "1.0": 0.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": -1.0, "11.0": -1.0, "12.0": -1.0, "13.0": -1.0, "14.0": 8.0, "15.0": -1.0, "16.0": -1.0, "17.0": -1.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": -1.0, "23.0": -1.0 },
+        "Saturday": { "0.0": 5.0, "1.0": -1.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": 11.0, "11.0": -1.0, "12.0": -1.0, "13.0": 0.0, "14.0": 0.0, "15.0": 5.0, "16.0": 2.0, "17.0": 8.0, "18.0": -1.0, "19.0": -1.0, "20.0": -1.0, "21.0": 0.0, "22.0": -1.0, "23.0": -1.0 },
+        "Sunday": { "0.0": -1.0, "1.0": 0.0, "2.0": -1.0, "3.0": -1.0, "4.0": -1.0, "5.0": -1.0, "6.0": -1.0, "7.0": -1.0, "8.0": -1.0, "9.0": -1.0, "10.0": -1.0, "11.0": -1.0, "12.0": -1.0, "13.0": 7.0, "14.0": -1.0, "15.0": 0.0, "16.0": 0.0, "17.0": -1.0, "18.0": 1.0, "19.0": -1.0, "20.0": -1.0, "21.0": -1.0, "22.0": 0.0, "23.0": -1.0 }
+    },
+    "topics": {
+        // Reporte de temas críticos y retos.
+        "topics": [
+            { "title": "Precio percibido como alto/sobrevalorado", "detail": "Numerosos comentarios califican el bolón como caro (USD 3,5–5) frente a alternativas de USD 1–1,50; se cuestionan extras (p. ej., huevo a USD 1).", "challenge": "Reforzar la propuesta de valor y arquitectura de precios (combos, tamaños, extras incluidos) y comunicar qué respalda el precio (calidad, higiene, formalidad, servicio)." },
+            { "title": "Calidad y sabor inconsistente al escalar", "detail": "Opiniones divididas: desde “normalito/malo/industrializado/perdió la sazón” hasta fans fieles; percepción de pérdida de esencia al masificarse.", "challenge": "Auditorías sensoriales y de procesos por local, formación continua, estandarización con flexibilidad local, medición NPS por producto/sucursal." },
+            { "title": "Producto específico bajo crítica: tigrillo", "detail": "Comentarios frecuentes de tigrillo “sopudo” o insípido; otros lo defienden como el mejor.", "challenge": "Reformular y permitir personalización (textura, lácteos, toppings), test A/B de recetas y receta “clásica vs. ligera”." },
+            { "title": "Métodos de pago limitados (no aceptan tarjetas)", "detail": "Reclamo reiterado por no aceptar tarjetas/Datafast; fricción para clientes que evitan efectivo.", "challenge": "Implementar pagos con tarjeta, QR y billeteras, sin afectar márgenes (negociar fees, mínimos por ticket, descuentos por cash planificados)." },
+            { "title": "Experiencia en local: tiempos, temperatura y confort", "detail": "Elogios a limpieza “tipo quirófano” y buen servicio; quejas puntuales por colas, platos fríos y falta de aire acondicionado.", "challenge": "Gestión de picos (prep/holding), control de temperatura al pase, mejora de confort (AC donde aplique) y fila digital/turnos." }
+        ],
+        "conclusion": "Los ejes críticos son: 1) ajustar la propuesta de valor (precio, porción, extras) y métodos de pago; 2) recuperar y sostener la consistencia sensorial del bolón y del tigrillo en todas las sedes; 3) mejorar fricciones de experiencia (tiempos, temperatura, confort, autoservicio); 4) profesionalizar delivery y expansión con dark kitchens y sucursales estratégicas; 5) gestionar la conversación digital con escucha activa y narrativa inclusiva que reduzca la polarización; 6) reforzar diferenciales (limpieza, ají, chicharrón) con innovación y personalización controlada. Priorizar quick wins (aceptar tarjetas, barra de salsas, comunicación de gramajes) mientras se ejecutan mejoras de fondo (auditorías de calidad y training) permitirá capturar valor sin diluir marca."
+    },
+    "sentiment_report": {
+        // Resumen del análisis de sentimiento.
+        "overall_polarity": "Mixto con ligera tendencia positiva y alta polarización",
+        "positive_percentage": 42.0,
+        "negative_percentage": 34.0,
+        "neutral_mixed_percentage": 24.0,
+        "dominant_themes": ["Precio y percepción de “caro/sobrevalorado”", "Calidad y sabor del bolón/tigrillo", "Historia de emprendimiento y éxito", "Servicio, limpieza y experiencia"],
+        "key_emotions": ["orgullo", "antojo", "enojo", "burla/sarcasmo", "frustración"],
+        "summary": "Las opiniones están fuertemente divididas: una parte significativa defiende a Café de Tere por su historia de emprendimiento, limpieza, servicio y consistencia; otra fracción crítica lo percibe como caro/sobrevalorado y cuestiona la calidad actual. Los principales drivers del sentimiento negativo son precio–valor y métodos de pago; los positivos, la marca consolidada, la experiencia del local y el relato de superación. Riesgo: que la etiqueta de “sobrevalorado/elitista” se consolide si no se atienden estas fricciones."
+    },
+    "collocation_report": {
+        // Reporte de colocaciones (palabras que aparecen frecuentemente juntas).
+        "top_collocations": [
+            { "phrase": "Café de Tere", "connection_to_challenges": "La marca concentra conversación polarizada (lovers vs haters). Reto: gestionar reputación y segmentación en redes." },
+            { "phrase": "Bolón de Tere", "connection_to_challenges": "Producto estrella con quejas de “caro/normalito/frío”. Reto: estandarizar sabor, temperatura y porción por local/turno." },
+            { "phrase": "Tigrillo de Tere", "connection_to_challenges": "Comentarios de “sopudo/insípido”. Reto: afinar receta y control de textura." },
+            { "phrase": "No aceptan tarjetas", "connection_to_challenges": "Fricción recurrente en el pago. Reto: habilitar datáfonos, QR y billeteras para elevar conversión y ticket promedio." },
+            { "phrase": "Limpieza de locales", "connection_to_challenges": "Atributo positivo diferencial. Reto: sostener el estándar en expansión y certificarlo para reforzar confianza." }
+        ],
+        "summary": "Las colocaciones más repetidas muestran que la conversación gira en torno a la marca y sus dos platos icónicos (bolón y tigrillo), con tensión en precio/valor y fuertes fricciones en medios de pago. Coexisten elogios a limpieza y a su ají con percepciones de “sobrevalorado”."
+    },
+    "entity_report": {
+        // Reporte de entidades nombradas (marcas, personas, lugares).
+        "main_brand_and_owner": ["Café de Tere (Bolón de Tere)", "Teresa Castro Mendoza (Doña Tere)", "@CafedeTere"],
+        "competitors_and_comparables": ["Amorfino Café", "Rey Bolón", "Juan Tonga", "Sambolón", "Verde & Café"],
+        "public_figures_and_influencers": ["Teresa Castro Mendoza (propietaria)", "MasterChef Ecuador (#MasterChefEcuador)", "The Pulp Ec (@ThePulpEc)"],
+        "key_associated_claims_topics": ["Precio percibido como caro/sobrevalorado", "No aceptación de tarjetas de crédito/datafast", "Calidad y sabor disparejos", "Higiene y estandarización: cocinas muy limpias"],
+        "relevant_locations": ["Guayaquil (GYE)", "La Garzota", "Vía a la Costa", "Alborada", "Urdesa"],
+        "summary": "El eje de la conversación es Café de Tere (propiedad de Teresa Castro Mendoza), una marca emblemática. Los temas clave que dominan el debate son: precios percibidos como altos, negativa a aceptar tarjetas, calidad/consistencia del producto, experiencia de servicio e higiene, y una fuerte polarización social y política en torno al éxito del negocio."
+    }
+};
         document.addEventListener('DOMContentLoaded', () => {
             // Inicializar Lucide Icons
             lucide.createIcons();
